@@ -1,31 +1,74 @@
-agenda = []
+contatos = [["-- Contatos --"]]
+keys = ["Nome:","Telefone:","Cidade:","Estado:","Status:"]
 
-def cadastro(): #menu item 1
-    nome = input(str("\nDigite o Nome: "))
-    telefone = input(str("Digite o Telefone: "))
-    cidade = input(str("Digite a Cidade: "))
-    estado = input(str("Digite o Estado: "))
-    status = input(str("Digite o Status\n'P' -> Pessoal | 'C' -> Comercial: "))
-    agenda.append([nome,telefone,cidade,estado,status])
+def incluir(): #menu - opção 1
+    nome = str(input("Digite o nome: "))
+    tel = str(input("Digite o telefone: "))
+    cidade = str(input("Digite a cidade: "))
+    estado = str(input("Digite o estado: "))
+    status = str(input('Status - Digite "P" p/ Pessoal ou "C" p/ Comercial: '))
+    contatos.append([nome,tel,cidade,estado,status])
+    print(f"\nCadastro do(a) {nome} efetuado com sucesso!")
 
-def lista(): #menu item 3
-    print()
-    print(agenda)
-
-def procura(nome): #menu item 4
-        ind_i = 0
-        ind_j = 0
-        for i in range (len(agenda)):
-            for j in range (i):
-                if nome in agenda[i][j]:
-                    ind_i = i
-                    ind_j = j
+def alterar(): #menu - opção 2
+    nome_altera = input("Digite o nome que deseja alterar: ")
+    for i in range (len(contatos)):
+        for j in range (i):
+            if nome_altera in contatos[i][j]:
+                print(f"\n{nome_altera} encontrado(a) na posição/índice {i},{j}.")
+                nome_altera = input("\nDigite o novo nome: ")
+                telefone_altera = input(str("Digite o novo telefone: "))
+                cidade_altera = input(str("Digite a nova cidade: "))
+                estado_altera = input(str("Digite o novo estado: "))
+                status_altera = input(str("Digite o novo status\n'P' -> Pessoal | 'C' -> Comercial: "))
+                confirma = input(f"\nConfirma alteração de {nome_altera}? S - Sim, N - Não: ")
+                if confirma == "S" or confirma == "s":
+                    contatos[i] = nome_altera, telefone_altera, cidade_altera, estado_altera, status_altera
+                    print(f"\nRegistro alterado com sucesso!")
                     break
+                else:
+                    print("\nAlteração cancelada!")
+            break
+        else:
+            print(f'\n{nome_altera} não foi encontrado!')
+
+def listar(): #menu - opção 3
+    print("\n3.AGENDA COMPLETA")
+    for cadastros in contatos:
+        print("- *** -")
+        for i in cadastros:
+            print(i)
+
+def procurar(): #menu - opção 4
+    nome_busca = str(input("Digite o nome: "))
+    for i in range (len(contatos)):
+        for j in range (i):
+            if nome_busca in contatos[i][j]:
+                print(f"\n{nome_busca} encontrado(a) na posição/índice {i},{j}.")
                 break
-        return (ind_i, ind_j)
+            else:
+                print(f"\n{nome_busca} não encontrado!")
+
+def excluir(): #menu - opção 5
+    nome_exclui = input("Digite o nome que deseja exluir: ")
+    for i in range (len(contatos)):
+        for j in range (i):
+            if nome_exclui in contatos[i][j]:
+                print(f"\n{nome_exclui} encontrado(a) na posição/índice {i},{j}.")
+                confirma = input(f"Confirma exclusão de {nome_exclui}? S - Sim, N - Não: ")
+                if confirma == "S" or confirma == "s":
+                    contatos.pop(i)
+                    print(f"\nRegistro de {nome_exclui} excluído com sucesso!")
+                    menu()
+                else:
+                    print("\nOperação cancelada!")
+                    menu()
+            else:
+                print(f"\n{nome_exclui} não foi encontrado!")
+                menu()
 
 def menu():
-    Tela = """\n
+    Tela = """
     ---------------------------
     |                          |
     |   MENU PESSOA AGENDA     |
@@ -48,50 +91,36 @@ opc = str(input("-> ESCOLHA A OPÇÃO: "))
 opc1 = "0"
 while opc1 != "6":
         if opc == "1":
-            cadastro()
-            print("\nCadastro feito com sucesso!\n")
+            incluir()
             menu()
             opc = str(input("-> ESCOLHA A OPÇÃO: "))
 
         elif opc == "2":
-            indice_altera = input("\nDigite o índice que deseja alterar: ")
-            if (agenda.index(int(indice_altera)) in agenda):
-                nome_altera = input("\nDigite o nome: ")
-                telefone_altera = input(str("Digite o telefone: "))
-                cidade_altera = input(str("Digite a Cidade: "))
-                estado_altera = input(str("Digite o Estado: "))
-                status_altera = input(str("Digite o Status\n'P' -> Pessoal | 'C' -> Comercial: "))
-                agenda[int(indice_altera)] = nome_altera, telefone_altera, cidade_altera, estado_altera, status_altera
-                print("\nRegistro alterado com sucesso!")
-                menu()
-                opc = str(input("-> ESCOLHA A OPÇÃO: "))                    
-            else:
-                print("\nÍndice não existe.")
-                menu()
-                opc = str(input("-> ESCOLHA A OPÇÃO: "))
-                    
+            alterar()
+            menu()
+            opc = str(input("-> ESCOLHA A OPÇÃO: "))
+
         elif opc == "3":
-            lista()
+            listar()
             menu()
             opc = str(input("-> ESCOLHA A OPÇÃO: "))
+
         elif opc == "4":
-            nome = input(str("\nDigite o nome que deseja procurar: "))
-            achei = procura(nome)
+            print("\n4.PROCURAR")
+            procurar()
             print()
-            print("Índice",achei,"na Agenda.") # imprime índices
-            print("Cadastro ->",agenda[achei[0]])
-            menu()
+            menu()         
             opc = str(input("-> ESCOLHA A OPÇÃO: "))
+
         elif opc == "5":
+            print("\n5.EXCLUSÃO DE REGISTRO")
             print()
-            indice = input("Digite o índice a ser excluido: ")
-            agenda.pop(int(indice))
+            excluir()
             print()
-            print("\nÍndice",indice,"excluído com sucesso!")
-            menu()
             opc = str(input("-> ESCOLHA A OPÇÃO: "))
+
         elif opc == "6":
-            print("\nObrigado por utilizar o sistema.\nAté breve!\n")
+            print("\nObrigado por utilizar o sistema.\n\nAté breve!\n")
             break
         else:
             print("\nDigite uma opção válida\n")
